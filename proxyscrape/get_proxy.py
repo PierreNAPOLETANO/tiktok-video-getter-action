@@ -13,13 +13,10 @@ def get_proxy(proxy_protocol = 'https', countries = 'fr', excluded_proxies = [])
     proxy_ips_to_try = proxies_request_content.splitlines()
 
     for proxy_ip_to_try in proxy_ips_to_try:
-        if not proxy_ip_to_try:
+        if not proxy_ip_to_try or (len(excluded_proxies) and proxy_to_try in excluded_proxies):
             continue
 
         proxy_to_try = proxy_protocol + '://' + proxy_ip_to_try
-        
-        if len(excluded_proxies) and proxy_to_try in excluded_proxies:
-            continue
 
         try:
             trying_proxy_request = requests.get('https://api.myip.com', proxies={
